@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CINE TV ONLINE - Entretenimento</title>
+    <!-- Font Awesome 6 (gratuito e nativo) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* Tela de Login */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-card {
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .login-card h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #e74c3c, #f39c12);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .login-card h2 i {
+            background: none;
+            -webkit-background-clip: unset;
+            color: #f39c12;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            background: linear-gradient(45deg, #e74c3c, #f39c12);
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .support-btn {
+            background: #25D366 !important;
+        }
+
+        /* Tela de Pagamento */
+        .payment-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: none;
+            overflow-y: auto;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .payment-card {
+            background: rgba(0,0,0,0.9);
+            border-radius: 30px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            margin: 20px auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .payment-card h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #f39c12;
+        }
+
+        .pricing-table {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            padding: 12px 20px;
+            border-radius: 15px;
+        }
+
+        .price-days {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .price-value {
+            font-size: 18px;
+            font-weight: 800;
+            color: #f39c12;
+        }
+
+        .payment-method {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .payment-method h3 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+
+        .payment-method p {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .copy-btn {
+            background: #27ae60;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* App Principal */
+        .app-container {
+            display: none;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header h1 i {
+            font-size: 1.6rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .logout-btn {
+            background: rgba(0,0,0,0.3);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .logout-btn i {
+            font-size: 1rem;
+        }
+
+        /* Histórico */
+        .history-section {
+            padding: 20px;
+            background: #111;
+            margin-bottom: 10px;
+        }
+
+        .history-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #f39c12;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .history-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding-bottom: 10px;
+        }
+
+        .history-item {
+            min-width: 100px;
+            background: #1a1a1a;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .history-item:hover {
+            transform: scale(1.02);
+        }
+
+        .history-item img {
+            width: 100px;
+            height: 140px;
+            object-fit: cover;
+        }
+
+        .history-item-info {
+            padding: 8px;
+            text-align: center;
+        }
+
+        .history-item-info h5 {
+            font-size: 11px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Categorias com ícones */
+        .categories {
+            display: flex;
+            gap: 12px;
+            padding: 15px;
+            overflow-x: auto;
+            background: #111;
+            scrollbar-width: thin;
+        }
+
+        .category-btn {
+            background: rgba(255,255,255,0.08);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: #fff;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .category-btn i {
+            font-size: 1rem;
+        }
+
+        .category-btn.active {
+            background: linear-gradient(45deg, #e74c3c, #f39c12);
+            box-shadow: 0 4px 12px rgba(231,76,60,0.3);
+        }
+
+        /* Grid de conteúdo */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .content-card {
+            background: #1a1a1a;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        .content-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .content-card .info {
+            padding: 12px;
+        }
+
+        .content-card h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .content-card p {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* PLAYER PROFISSIONAL COM ÍCONES */
+        .player-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            background: radial-gradient(circle at center, #0f0f1a 0%, #000000 100%);
+        }
+
+        .player-screen.active {
+            display: flex;
+        }
+
+        .video-container {
+            flex: 1;
+            background: #000;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000000;
+        }
+
+        .dynamic-player-area {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dynamic-player-area video,
+        .dynamic-player-area iframe {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border: none;
+        }
+
+        /* Botão fullscreen com ícone */
+        .fullscreen-btn {
+            position: absolute;
+            bottom: 25px;
+            right: 25px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 30;
+            transition: all 0.25s ease;
+            font-size: 1.4rem;
+        }
+
+        .fullscreen-btn:hover {
+            background: #e74c3c;
+            transform: scale(1.05);
+        }
+
+        /* Painel inferior com botão voltar e ícones */
+        .player-info-panel {
+            background: linear-gradient(0deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 100%);
+            backdrop-filter: blur(12px);
+            padding: 18px 24px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .player-text {
+            flex: 3;
+            min-width: 180px;
+        }
+
+        .player-text h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #fff, #f39c12);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .player-text p {
+            font-size: 0.85rem;
+            color: #ccc;
+            line-height: 1.4;
+        }
+
+        /* Botão voltar estiloso com ícone */
+        .back-button {
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .back-button i {
+            font-size: 1.1rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
+
+        .close-player-alt {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            border: none;
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 40px;
+            cursor: pointer;
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .close-player-alt:hover {
+            background: #e74c3c;
+        }
+
+        /* Fullscreen adaptação */
+        .video-container:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+        .video-container:fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Modal e loading */
+        .dialog-modal {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border-radius: 20px;
+            padding: 20px;
+            z-index: 1500;
+            display: none;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #fff;
+            border-top-color: #e74c3c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .maintenance {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 4000;
+            display: none;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .content-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 12px;
+            }
+            .content-card img {
+                height: 160px;
+            }
+            .back-button {
+                padding: 8px 20px;
+                font-size: 0.85rem;
+            }
+            .player-text h3 {
+                font-size: 1rem;
+            }
+            .category-btn {
+                padding: 6px 16px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <h2><i class="fas fa-film"></i>CINE TV ONㅤㅤ</h2>
+            <p style="margin-bottom: 20px;">Entre com seus dados</p>
+            <input type="text" id="loginUsername" placeholder="Username" autocomplete="off">
+            <input type="password" id="loginPassword" placeholder="Senha">
+            <button onclick="login()"><i class="fas fa-key"></i> Ativar Conta</button>
+            <button class="support-btn" onclick="window.open('https://chat.whatsapp.com/CjEs2DLAj9DIdVz6yOpre7', '_blank')"><i class="fab fa-whatsapp"></i> Suporte WhatsApp</button>
+            <p style="margin-top: 20px; font-size: 12px; color: #aaa;">Entre em contato com o suporte para adquirir acesso</p>
+        </div>
+    </div>
+
+    <!-- Tela de Pagamento -->
+    <div id="paymentScreen" class="payment-screen">
+        <div class="payment-card">
+            <h2><i class="fas fa-clock"></i> Aguardando Ativação</h2>
+            <p style="text-align: center; margin: 10px 0;">Sua conta será ativada após o pagamento</p>
+            <div class="pricing-table">
+                <div class="price-row"><span class="price-days"><i class="fas fa-calendar-day"></i> 1 dia</span><span class="price-value">10 MT</span></div>
+                <div class="price-row"><span class="price-days"><i class="fas fa-calendar-week"></i> 2 dias</span><span class="price-value">25 MT</span></div>
+                <div class="price-row"><span class="price-days"><i class="fas fa-calendar-week"></i> 7 dias</span><span class="price-value">40 MT</span></div>
+                <div class="price-row"><span class="price-days"><i class="fas fa-calendar-alt"></i> 15 dias</span><span class="price-value">75 MT</span></div>
+                <div class="price-row"><span class="price-days"><i class="fas fa-calendar-alt"></i> 20 dias</span><span class="price-value">95 MT</span></div>
+                <div class="price-row"><span class="price-days"><i class="fas fa-calendar-check"></i> 30 dias</span><span class="price-value">120 MT</span></div>
+            </div>
+
+            <div class="payment-method">
+                <h3><i class="fas fa-mobile-alt"></i> MOVITEL</h3>
+                <p>E-mola: <strong>871701944</strong></p>
+                <p>Nome: <strong>Sérgio</strong></p>
+                <button class="copy-btn" onclick="copyText('871701944')"><i class="fas fa-copy"></i> Copiar Número</button>
+            </div>
+
+            <div class="payment-method">
+                <h3><i class="fas fa-sim-card"></i> VODACOM</h3>
+                <p>M-pesa: <strong>855797167</strong></p>
+                <p>Nome: <strong>Sérgio</strong></p>
+                <button class="copy-btn" onclick="copyText('855797167')"><i class="fas fa-copy"></i> Copiar Número</button>
+            </div>
+
+            <p style="text-align: center; font-size: 12px; color: #aaa; margin-top: 20px;">
+                Após o pagamento, envie o comprovante para o suporte.<br>
+                Sua conta será ativada em menos de 5 minutos.
+            </p>
+            <button onclick="checkAccountStatus()" style="margin-top: 20px; width: 100%;"><i class="fas fa-sync-alt"></i> Verificar Status</button>
+        </div>
+    </div>
+
+    <!-- App Principal -->
+    <div id="appContainer" class="app-container">
+        <div class="header">
+            <h1><i class="fas fa-tv"></i> ㅤCINE TV ONLINE</h1>
+            <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+        </div>
+
+        <div class="history-section" id="historySection" style="display: none;">
+            <div class="history-title"><i class="fas fa-history"></i> Histórico de Assistidos</div>
+            <div class="history-scroll" id="historyList"></div>
+        </div>
+
+        <div class="categories" id="categories">
+            <button class="category-btn active" data-cat="canais"><i class="fas fa-satellite-dish"></i> Canais</button>
+            <button class="category-btn" data-cat="filmes"><i class="fas fa-film"></i> Filmes</button>
+            <button class="category-btn" data-cat="series"><i class="fas fa-tv"></i> Séries</button>
+        </div>
+
+        <div id="contentGrid" class="content-grid"></div>
+    </div>
+
+    <!-- Player Screen com design refinado e ícones -->
+    <div id="playerScreen" class="player-screen">
+        <button class="close-player-alt" onclick="closePlayer()"><i class="fas fa-times"></i></button>
+        <div class="video-container" id="videoContainer">
+            <div id="dynamicPlayerArea" class="dynamic-player-area"></div>
+            <button class="fullscreen-btn" onclick="toggleFullScreen()"><i class="fas fa-expand"></i></button>
+        </div>
+        <div class="player-info-panel">
+            <div class="player-text">
+                <h3><i class="fas fa-play-circle"></i> <span id="playerTitle">Título</span></h3>
+                <p id="playerDesc">Descrição do conteúdo</p>
+            </div>
+            <button class="back-button" onclick="closePlayer()"><i class="fas fa-arrow-left"></i> Voltar</button>
+        </div>
+    </div>
+
+    <!-- Dialog Modal -->
+    <div id="dialogModal" class="dialog-modal">
+        <button class="dialog-close" onclick="closeDialog()">✕</button>
+        <h3 id="dialogTitle"></h3>
+        <p id="dialogMsg"></p>
+    </div>
+
+    <div id="loading" class="loading"><div class="spinner"></div></div>
+    <div id="maintenance" class="maintenance"><h2><i class="fas fa-tools"></i> Sistema em Manutenção</h2><p id="maintenanceMsg">Voltamos em breve!</p></div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA43U7ilw_-lkrFf9Z0oAf0drLUGSPOglo",
+            authDomain: "painel-4f358.firebaseapp.com",
+            databaseURL: "https://painel-4f358-default-rtdb.firebaseio.com",
+            projectId: "painel-4f358",
+            storageBucket: "painel-4f358.firebasestorage.app"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        let currentUser = null;
+        let currentCategory = 'canais';
+        let watchHistory = [];
+
+        function showLoading() { document.getElementById('loading').style.display = 'flex'; }
+        function hideLoading() { document.getElementById('loading').style.display = 'none'; }
+
+        function toggleFullScreen() {
+            const videoContainer = document.getElementById('videoContainer');
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                if (videoContainer.requestFullscreen) videoContainer.requestFullscreen();
+                else if (videoContainer.webkitRequestFullscreen) videoContainer.webkitRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            }
+        }
+
+        function getYouTubeVideoId(url) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=)([^&]+)/,
+                /(?:youtu\.be\/)([^?]+)/,
+                /(?:youtube\.com\/embed\/)([^?]+)/
+            ];
+            for (let pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        // Player refinado com suporte total
+        function openPlayer(videoUrl, title, desc, contentId, category, imageUrl) {
+            const playerScreen = document.getElementById('playerScreen');
+            const dynamicArea = document.getElementById('dynamicPlayerArea');
+            const playerTitle = document.getElementById('playerTitle');
+            const playerDesc = document.getElementById('playerDesc');
+            
+            const contentItem = {
+                id: contentId,
+                title: title,
+                description: desc,
+                video: videoUrl,
+                image: imageUrl || 'https://via.placeholder.com/100x140?text=Video',
+                category: category
+            };
+            saveToHistory(contentItem);
+            
+            dynamicArea.innerHTML = '';
+            playerTitle.innerText = title;
+            playerDesc.innerText = desc;
+            
+            const youtubeId = getYouTubeVideoId(videoUrl);
+            
+            if (youtubeId) {
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&controls=1&modestbranding=1&rel=0&fs=1&playsinline=1`;
+                iframe.setAttribute('allowfullscreen', 'true');
+                iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen');
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                dynamicArea.appendChild(iframe);
+            } else {
+                const video = document.createElement('video');
+                video.controls = true;
+                video.autoplay = true;
+                video.playsInline = true;
+                video.style.width = '100%';
+                video.style.height = '100%';
+                video.style.objectFit = 'contain';
+                const source = document.createElement('source');
+                source.src = videoUrl;
+                source.type = 'video/mp4';
+                video.appendChild(source);
+                video.load();
+                dynamicArea.appendChild(video);
+                video.play().catch(e => console.log('Autoplay:', e));
+            }
+            
+            playerScreen.classList.add('active');
+        }
+
+        function closePlayer() {
+            const playerScreen = document.getElementById('playerScreen');
+            const dynamicArea = document.getElementById('dynamicPlayerArea');
+            if (dynamicArea) dynamicArea.innerHTML = '';
+            playerScreen.classList.remove('active');
+        }
+
+        // LOGIN e demais funções (preservadas e integradas)
+        async function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            if(!username || !password) { alert('Preencha username e senha'); return; }
+            showLoading();
+            const snapshot = await database.ref('accounts/' + username).once('value');
+            const account = snapshot.val();
+            if(account && account.password === password) {
+                const expiry = new Date(account.expiryDate);
+                const now = new Date();
+                if(expiry > now && account.status === 'active') {
+                    currentUser = username;
+                    localStorage.setItem('cinemaUser', username);
+                    localStorage.setItem('cinemaPass', password);
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('appContainer').style.display = 'block';
+                    loadWatchHistory();
+                    loadContents();
+                    checkSystemStatus();
+                    startDialogListener();
+                    hideLoading();
+                } else { hideLoading(); alert('Conta expirada ou inativa. Renove seu acesso!'); }
+            } else {
+                const pendingSnap = await database.ref('pending/' + username).once('value');
+                if(pendingSnap.exists()) {
+                    hideLoading();
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('paymentScreen').style.display = 'flex';
+                    localStorage.setItem('pendingUser', username);
+                    localStorage.setItem('pendingPass', password);
+                } else {
+                    await database.ref('pending/' + username).set({ username, password, requestDate: new Date().toISOString() });
+                    hideLoading();
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('paymentScreen').style.display = 'flex';
+                    localStorage.setItem('pendingUser', username);
+                    localStorage.setItem('pendingPass', password);
+                }
+            }
+        }
+
+        async function checkAccountStatus() {
+            const user = localStorage.getItem('pendingUser');
+            if(user) {
+                showLoading();
+                const snapshot = await database.ref('accounts/' + user).once('value');
+                if(snapshot.exists()) {
+                    const account = snapshot.val();
+                    const expiry = new Date(account.expiryDate);
+                    if(expiry > new Date() && account.status === 'active') {
+                        localStorage.removeItem('pendingUser');
+                        localStorage.removeItem('pendingPass');
+                        document.getElementById('paymentScreen').style.display = 'none';
+                        currentUser = user;
+                        localStorage.setItem('cinemaUser', user);
+                        localStorage.setItem('cinemaPass', account.password);
+                        document.getElementById('appContainer').style.display = 'block';
+                        loadWatchHistory();
+                        loadContents();
+                        checkSystemStatus();
+                        startDialogListener();
+                        alert('Conta ativada! Bem-vindo!');
+                    } else { alert('Conta ainda não foi ativada. Aguarde o administrador.'); }
+                } else { alert('Conta pendente. Aguarde ativação.'); }
+                hideLoading();
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.clear();
+            watchHistory = [];
+            document.getElementById('appContainer').style.display = 'none';
+            document.getElementById('paymentScreen').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+            closePlayer();
+        }
+
+        function saveToHistory(content) {
+            if(!currentUser) return;
+            watchHistory = watchHistory.filter(item => item.id !== content.id);
+            watchHistory.unshift(content);
+            if(watchHistory.length > 10) watchHistory.pop();
+            localStorage.setItem(`history_${currentUser}`, JSON.stringify(watchHistory));
+            loadWatchHistory();
+        }
+
+        function loadWatchHistory() {
+            const saved = localStorage.getItem(`history_${currentUser}`);
+            if(saved) watchHistory = JSON.parse(saved);
+            const historySection = document.getElementById('historySection');
+            const historyList = document.getElementById('historyList');
+            if(watchHistory.length > 0) {
+                historySection.style.display = 'block';
+                historyList.innerHTML = '';
+                watchHistory.slice(0, 6).forEach(item => {
+                    historyList.innerHTML += `<div class="history-item" onclick='openPlayer("${item.video}", "${item.title.replace(/'/g, "\\'")}", "${item.description.replace(/'/g, "\\'")}", "${item.id}", "${item.category}", "${item.image || ''}")'>
+                        <img src="${item.image || 'https://via.placeholder.com/100x140?text=Video'}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/100x140?text=Erro'">
+                        <div class="history-item-info"><h5>${item.title.substring(0, 15)}</h5></div>
+                    </div>`;
+                });
+            } else { historySection.style.display = 'none'; }
+        }
+
+        async function loadContents() {
+            const snapshot = await database.ref('contents/' + currentCategory).once('value');
+            const contents = snapshot.val();
+            const grid = document.getElementById('contentGrid');
+            grid.innerHTML = '';
+            if(contents) {
+                for(const [id, item] of Object.entries(contents)) {
+                    grid.innerHTML += `<div class="content-card" onclick='openPlayer("${item.video}", "${item.title.replace(/'/g, "\\'")}", "${item.description.replace(/'/g, "\\'")}", "${id}", "${currentCategory}", "${item.image || ''}")'>
+                        <img src="${item.image}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/300x200?text=Sem+Imagem'">
+                        <div class="info"><h4><i class="fas fa-play"></i> ${item.title}</h4><p>${item.description.substring(0, 50)}...</p></div>
+                    </div>`;
+                }
+            } else { grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #aaa;">Nenhum conteúdo disponível</p>'; }
+        }
+
+        let dialogInterval = null;
+        async function startDialogListener() {
+            if(dialogInterval) clearInterval(dialogInterval);
+            const checkDialogs = async () => {
+                const snapshot = await database.ref('dialogs').once('value');
+                const dialogs = snapshot.val();
+                if(dialogs) {
+                    for(const [id, dialog] of Object.entries(dialogs)) {
+                        if(new Date(dialog.expiresAt) > new Date()) { showDialog(dialog.title, dialog.message); break; } 
+                        else await database.ref('dialogs/' + id).remove();
+                    }
+                }
+            };
+            checkDialogs();
+            dialogInterval = setInterval(checkDialogs, 60000);
+        }
+        function showDialog(title, message) { 
+            const modal = document.getElementById('dialogModal');
+            document.getElementById('dialogTitle').innerText = title;
+            document.getElementById('dialogMsg').innerText = message;
+            modal.style.display = 'block';
+            setTimeout(() => closeDialog(), 10000);
+        }
+        function closeDialog() { document.getElementById('dialogModal').style.display = 'none'; }
+        async function checkSystemStatus() {
+            const snapshot = await database.ref('system').once('value');
+            const system = snapshot.val();
+            if(system && system.active === false) {
+                document.getElementById('maintenanceMsg').innerText = system.maintenanceMessage || 'Sistema em manutenção. Volte em breve!';
+                document.getElementById('maintenance').style.display = 'flex';
+                document.getElementById('appContainer').style.display = 'none';
+            } else { document.getElementById('maintenance').style.display = 'none'; }
+        }
+        function copyText(text) { navigator.clipboard.writeText(text); alert('Número copiado: ' + text); }
+
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.dataset.cat;
+                loadContents();
+            });
+        });
+
+        function checkSavedLogin() {
+            const savedUser = localStorage.getItem('cinemaUser');
+            const savedPass = localStorage.getItem('cinemaPass');
+            if(savedUser && savedPass) {
+                document.getElementById('loginUsername').value = savedUser;
+                document.getElementById('loginPassword').value = savedPass;
+                login();
+            }
+        }
+        checkSavedLogin();
+        setInterval(checkSystemStatus, 30000);
+    </script>
+</body>
+</html>
